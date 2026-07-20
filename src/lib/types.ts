@@ -3,6 +3,7 @@ export interface CompanyInfo {
   email: string;
   phone: string;
   address: string;
+  logoUrl?: string;
 }
 
 export interface ClientInfo {

@@ -18,7 +18,7 @@ interface QuoteContextType {
 }
 
 const defaultState: QuoteState = {
-  company: { name: "", email: "", phone: "", address: "" },
+  company: { name: "", email: "", phone: "", address: "", logoUrl: "" },
   client: { name: "", projectAddress: "", date: new Date().toISOString().split("T")[0] },
   items: [],
   taxRate: 0,
