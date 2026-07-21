@@ -20,7 +20,12 @@ export interface LineItem {
   total: number;
 }
 
+export type DocumentType = 'quote' | 'rate_sheet';
+export type RateType = 'hourly' | 'daily' | 'flat';
+
 export interface QuoteState {
+  documentType: DocumentType;
+  rateType: RateType;
   company: CompanyInfo;
   client: ClientInfo;
   items: LineItem[];

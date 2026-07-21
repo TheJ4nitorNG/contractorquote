@@ -6,7 +6,11 @@ import { formatCurrency } from "@/lib/utils";
 
 export const QuotePreview = forwardRef<HTMLDivElement>((props, ref) => {
   const { quote, subtotal, taxAmount, grandTotal } = useQuote();
-  const { company, client, items, taxRate, notes } = quote;
+  const { company, client, items, taxRate, notes, documentType, rateType } = quote;
+
+  const docTitle = documentType === 'quote' ? 'Quote' : 'Rate Sheet';
+  const qtyLabel = rateType === 'hourly' ? 'Hours' : rateType === 'daily' ? 'Days' : 'Qty';
+  const priceLabel = rateType === 'hourly' ? 'Hourly Rate' : rateType === 'daily' ? 'Daily Rate' : 'Unit Price';
 
   return (
     <div ref={ref} className="bg-white p-8 sm:p-12 text-black max-w-4xl mx-auto shadow-sm min-h-[1056px] print:shadow-none print:p-0 print:bg-white print:text-black">
@@ -26,7 +30,7 @@ export const QuotePreview = forwardRef<HTMLDivElement>((props, ref) => {
           </div>
         </div>
         <div className="text-right">
-          <h2 className="text-2xl font-semibold text-gray-400 uppercase tracking-widest print:text-gray-500">Quote</h2>
+          <h2 className="text-2xl font-semibold text-gray-400 uppercase tracking-widest print:text-gray-500">{docTitle}</h2>
           <div className="mt-4 text-gray-600 print:text-black">
             <p><span className="font-semibold">Date:</span> {client.date}</p>
           </div>
@@ -47,8 +51,8 @@ export const QuotePreview = forwardRef<HTMLDivElement>((props, ref) => {
         <thead>
           <tr className="border-b-2 border-gray-300">
             <th className="py-3 font-semibold text-gray-900 print:text-black">Description</th>
-            <th className="py-3 font-semibold text-gray-900 text-center print:text-black">Qty</th>
-            <th className="py-3 font-semibold text-gray-900 text-right print:text-black">Unit Price</th>
+            <th className="py-3 font-semibold text-gray-900 text-center print:text-black">{qtyLabel}</th>
+            <th className="py-3 font-semibold text-gray-900 text-right print:text-black">{priceLabel}</th>
             <th className="py-3 font-semibold text-gray-900 text-right print:text-black">Total</th>
           </tr>
         </thead>
@@ -63,7 +67,7 @@ export const QuotePreview = forwardRef<HTMLDivElement>((props, ref) => {
           ))}
           {items.length === 0 && (
             <tr>
-              <td colSpan={4} className="py-8 text-center text-gray-400 italic print:text-gray-500">No items added to this quote yet.</td>
+              <td colSpan={4} className="py-8 text-center text-gray-400 italic print:text-gray-500">No items added to this document yet.</td>
             </tr>
           )}
         </tbody>

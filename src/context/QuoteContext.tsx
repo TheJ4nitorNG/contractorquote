@@ -1,10 +1,12 @@
 "use client";
 
 import React, { createContext, useContext, useState, useMemo } from "react";
-import { QuoteState, CompanyInfo, ClientInfo, LineItem } from "@/lib/types";
+import { QuoteState, CompanyInfo, ClientInfo, LineItem, DocumentType, RateType } from "@/lib/types";
 
 interface QuoteContextType {
   quote: QuoteState;
+  updateDocumentType: (type: DocumentType) => void;
+  updateRateType: (type: RateType) => void;
   updateCompany: (company: CompanyInfo) => void;
   updateClient: (client: ClientInfo) => void;
   addLineItem: (item: LineItem) => void;
@@ -18,6 +20,8 @@ interface QuoteContextType {
 }
 
 const defaultState: QuoteState = {
+  documentType: "quote",
+  rateType: "flat",
   company: { name: "", email: "", phone: "", address: "", logoUrl: "" },
   client: { name: "", projectAddress: "", date: new Date().toISOString().split("T")[0] },
   items: [],
@@ -29,6 +33,14 @@ const QuoteContext = createContext<QuoteContextType | undefined>(undefined);
 
 export const QuoteProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [quote, setQuote] = useState<QuoteState>(defaultState);
+
+  const updateDocumentType = (documentType: DocumentType) => {
+    setQuote((prev) => ({ ...prev, documentType }));
+  };
+
+  const updateRateType = (rateType: RateType) => {
+    setQuote((prev) => ({ ...prev, rateType }));
+  };
 
   const updateCompany = (company: CompanyInfo) => {
     setQuote((prev) => ({ ...prev, company }));
@@ -80,6 +92,8 @@ export const QuoteProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const value: QuoteContextType = {
     quote,
+    updateDocumentType,
+    updateRateType,
     updateCompany,
     updateClient,
     addLineItem,

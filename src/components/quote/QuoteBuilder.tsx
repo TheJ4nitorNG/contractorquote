@@ -11,22 +11,57 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Printer } from "lucide-react";
 import { useReactToPrint } from "react-to-print";
+import { DocumentType, RateType } from "@/lib/types";
 
 export function QuoteBuilder() {
-  const { quote, updateTaxRate, updateNotes } = useQuote();
+  const { quote, updateTaxRate, updateNotes, updateDocumentType, updateRateType } = useQuote();
   const contentRef = useRef<HTMLDivElement>(null);
-  
+
   const handlePrint = useReactToPrint({
     contentRef,
-    documentTitle: `Quote-${quote.client.name || "Client"}`,
+    documentTitle: `${quote.documentType === 'quote' ? 'Quote' : 'Rate-Sheet'}-${quote.client.name || "Client"}`,
   });
 
   return (
     <div className="flex flex-col lg:flex-row gap-8 relative">
       {/* Builder Form Side */}
       <div className="w-full lg:w-1/2 space-y-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Document Settings</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4 sm:flex sm:space-y-0 sm:gap-4">
+            <div className="space-y-2 flex-1">
+              <Label>Document Type</Label>
+              <Select value={quote.documentType} onValueChange={(val) => updateDocumentType(val as DocumentType)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="quote">Quote</SelectItem>
+                  <SelectItem value="rate_sheet">Rate Sheet</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2 flex-1">
+              <Label>Rate Type</Label>
+              <Select value={quote.rateType} onValueChange={(val) => updateRateType(val as RateType)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select rate type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="flat">Flat / By Job</SelectItem>
+                  <SelectItem value="hourly">Hourly Rate</SelectItem>
+                  <SelectItem value="daily">Daily Rate</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </CardContent>
+        </Card>
+
         <CompanyForm />
         <ClientForm />
         <LineItems />
